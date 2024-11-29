@@ -16,7 +16,7 @@ body, html {
 }
 
 .logo {
-    width: 300px;
+    width: 50% vw;
     margin-bottom: 20px;
 }
 
