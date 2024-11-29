@@ -1,0 +1,23 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barker Captive Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <img src="logo.png" alt="BARKER Logo" class="logo">
+        <div class="message">Welcome to Barker's Wi-Fi! Please agree to the terms and conditions to continue.</div>
+        <form onsubmit="return handleFormSubmit(event)">
+            <label>
+                <input type="checkbox" id="agreeCheckbox"> I agree to the terms and conditions
+            </label>
+            <button type="submit">Connect</button>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
