@@ -35,7 +35,7 @@ function handleFormSubmit(event) {
         const redirectUrl = `${params.base_grant_url}?continue_url=${encodeURIComponent(params.user_continue_url || 'https://www.example.com')}`;
         window.location.href = redirectUrl;
     } else {
-        alert('Unable to connect. Please try again later.');
+        showModal('Unable to connect. Please try again later.');
     }
 }
 
