@@ -32,7 +32,7 @@ input[type="checkbox"] {
 .modal {
     display: none; /* Hidden by default */
     position: fixed;
-    z-index: 9999; /* Sit on top */
+    z-index: 9999;
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -42,14 +42,26 @@ input[type="checkbox"] {
 }
 
 .modal-content {
-    background-color: #fff;
-    margin: 15% auto; /* 15% from the top and centered */
+    background-color: #fff; /* Modal background color */
+    margin: 15% auto; /* Center the modal */
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 80%;
     max-width: 400px;
     border-radius: 10px;
     text-align: center;
+    color: #0047AB; /* Default text color */
+}
+
+.modal-content h2 {
+    color: #0047AB; /* Title color */
+    margin-bottom: 15px;
+}
+
+.modal-content p {
+    color: #333; /* Message color */
+    font-size: 16px;
+    margin-bottom: 20px;
 }
 
 .modal-close {
@@ -68,19 +80,17 @@ input[type="checkbox"] {
 }
 
 button {
-    padding: 15px 30px;
-    background-color: white;
-    color: #0047AB;
-    font-weight: bold;
-    text-transform: uppercase;
+    padding: 10px 20px;
+    color: white; /* Button text color */
+    background-color: #0047AB; /* Button background color */
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #f2f2f2;
+    background-color: #003580; /* Button background on hover */
 }
+
 
 
