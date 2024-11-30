@@ -1,3 +1,7 @@
+window.alert = function(message) {
+    showModal('Alert', message);
+};
+
 // Redirect from the mini-browser to the default browser
 if (navigator.userAgent.includes('CaptiveNetworkSupport')) {
     window.location.href = "https://taylorpetrehn.github.io/splashpage/";
