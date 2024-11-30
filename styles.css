@@ -59,13 +59,13 @@ input[type="checkbox"] {
 }
 
 .modal-content p {
-    color: #333; /* Message color */
+    color: #0047AB; /* Message color */
     font-size: 16px;
     margin-bottom: 20px;
 }
 
 .modal-close {
-    color: #aaa;
+    color: #0047AB;
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -74,7 +74,7 @@ input[type="checkbox"] {
 
 .modal-close:hover,
 .modal-close:focus {
-    color: #000;
+    color: #0047AB;
     text-decoration: none;
     cursor: pointer;
 }
