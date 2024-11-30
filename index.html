@@ -1,15 +1,60 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barker Captive Portal</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Roboto', sans-serif;
+            background-color: #0047AB;
+            color: #fff;
+        }
+
+        .wrapper {
+            text-align: center;
+        }
+
+        .logo {
+            width: 300px;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 15px 30px;
+            background-color: white;
+            color: #0047AB;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
     <div class="wrapper">
-        <img src="https://images.squarespace-cdn.com/content/52e833f5e4b0dacf750e66a1/1713980671673-40FA15S8B2LS62Q4QYC9/logotype-wh.png?content-type=image%2Fpng" alt="BARKER Logo" class="logo">
+        <img src="https://images.squarespace-cdn.com/content/v1/52e833f5e4b0dacf750e66a1/1713980671673-40FA15S8B2LS62Q4QYC9/logotype-wh.png?format=2500w" alt="BARKER Logo" class="logo">
         <div class="message">Welcome to Barker's Wi-Fi! Please agree to the terms and conditions to continue.</div>
         <form onsubmit="return handleFormSubmit(event)">
             <label>
@@ -18,6 +63,25 @@
             <button type="submit">Connect</button>
         </form>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        // Redirect from the mini-browser to the default browser
+        if (navigator.userAgent.includes('CaptiveNetworkSupport')) {
+            window.location.href = "https://taylorpetrehn.github.io/splashpage/";
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+
+            const checkbox = document.getElementById('agreeCheckbox');
+            if (!checkbox.checked) {
+                alert('You must agree to the terms and conditions to continue.');
+                return false;
+            }
+
+            // Redirect or process the form submission here
+            alert('Access Granted! You will now be redirected.');
+        }
+    </script>
 </body>
 </html>
