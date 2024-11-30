@@ -19,9 +19,10 @@ function handleFormSubmit(event) {
 
     const checkbox = document.getElementById('agreeCheckbox');
     if (!checkbox.checked) {
-        alert('You must agree to the terms and conditions to continue.');
-        return false; // Stop further processing if checkbox is not checked
+        showModal('Agreement Required', 'You must agree to the terms and conditions to continue.');
+        return false;
     }
+
 
     const params = getQueryParams(); // Get URL query parameters
 
