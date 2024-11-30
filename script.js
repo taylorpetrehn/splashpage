@@ -33,3 +33,19 @@ function handleFormSubmit(event) {
         alert('Unable to connect. Please try again later.');
     }
 }
+
+function showModal(title, message) {
+    const modal = document.getElementById('customModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMessage = document.getElementById('modalMessage');
+
+    modalTitle.textContent = title; // Set the title of the modal
+    modalMessage.textContent = message; // Set the message of the modal
+    modal.style.display = 'block'; // Show the modal
+}
+
+function closeModal() {
+    const modal = document.getElementById('customModal');
+    modal.style.display = 'none'; // Hide the modal
+}
+
