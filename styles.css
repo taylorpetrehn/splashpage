@@ -71,6 +71,14 @@ input[type="checkbox"] {
     font-weight: bold;
     cursor: pointer;
 }
+.modal-button {
+    padding: 10px 20px;
+    color: white; /* Button text color */
+    background-color: #0047AB; /* Button background color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
 .modal-close:hover,
 .modal-close:focus {
