@@ -21,10 +21,6 @@ function getQueryParams() {
 function handleFormSubmit(event) {
     event.preventDefault(); // Prevent default form submission behavior
 
-    // const checkbox = document.getElementById('agreeCheckbox');
-    // if (!checkbox.checked) {
-    //     showModal('Agreement Required', 'You must agree to the terms and conditions to continue.');
-    //     return false;
     }
 
 
