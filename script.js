@@ -57,16 +57,17 @@ function closeModal() {
     }
 }
 
-// Button click event for "Connect"
 document.getElementById('connectButton').addEventListener('click', function () {
-    const params = getQueryParams(); // Get query parameters
-    const baseGrantUrl = params.base_grant_url;
-    const userContinueUrl = params.user_continue_url || 'https://example.com/sign-in';
+    const params = new URLSearchParams(window.location.search);
+    const baseGrantUrl = params.get('base_grant_url');
+    const userContinueUrl = params.get('user_continue_url') || 'https://1900barker.com';
 
     if (baseGrantUrl) {
-        // Open the captive portal sign-in page in a new window/tab
-        window.open(`${baseGrantUrl}?continue_url=${encodeURIComponent(userContinueUrl)}`, '_blank');
+        // Open a new browser window with the base grant URL and user continue URL
+        const redirectUrl = `${baseGrantUrl}?continue_url=${encodeURIComponent(userContinueUrl)}`;
+        window.open(redirectUrl, '_blank');
     } else {
-        alert('Unable to connect. Please try again later.');
+        // If base grant URL is missing, fall back to the main site
+        window.open('https://1900barker.com', '_blank');
     }
 });
