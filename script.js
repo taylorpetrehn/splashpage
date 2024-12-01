@@ -59,7 +59,7 @@ function closeModal() {
 
 document.getElementById('connectButton').addEventListener('click', function () {
     const params = new URLSearchParams(window.location.search);
-    const baseGrantUrl = params.get('base_grant_url');
+    const baseGrantUrl = params.get('base_grant_url'); || 'https://1900barker.com';
     const userContinueUrl = params.get('user_continue_url') || 'https://1900barker.com';
 
     if (baseGrantUrl) {
