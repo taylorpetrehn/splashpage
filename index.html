@@ -8,21 +8,11 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-        <div id="customModal" class="modal">
-    <div class="modal-content">
-        <span class="modal-close" onclick="closeModal()">&times;</span>
-        <h2 id="modalTitle">Alert</h2>
-        <p id="modalMessage">You must agree to the terms and conditions to continue.</p>
-        <button onclick="closeModal()">OK</button>
-    </div>
-</div>
+
     <div class="wrapper">
         <img src="https://images.squarespace-cdn.com/content/v1/52e833f5e4b0dacf750e66a1/1713980671673-40FA15S8B2LS62Q4QYC9/logotype-wh.png?format=2500w" alt="BARKER Logo" class="logo">
-        <div class="message">Welcome to Barker's Wi-Fi! Please agree to the terms and conditions to continue.</div>
+        <div class="message">Welcome to Barker's Wi-Fi! To access our Wi-Fi, please tap the button below:</div>
         <form onsubmit="return handleFormSubmit(event)">
-            <label>
-                <input type="checkbox" id="agreeCheckbox"> I agree to the terms and conditions
-            </label>
             <button type="submit">Connect</button>
         </form>
     </div>

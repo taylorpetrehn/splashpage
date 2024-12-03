@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Barker WiFi</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .signin-form {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            color: #333;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .signin-form input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .signin-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #0047AB;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .signin-form button:hover {
+            background-color: #003380;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <img src="https://images.squarespace-cdn.com/content/v1/52e833f5e4b0dacf750e66a1/1713980671673-40FA15S8B2LS62Q4QYC9/logotype-wh.png?format=2500w" alt="BARKER Logo" class="logo">
+        
+        <div class="signin-form">
+            <h2>Sign In to Access WiFi</h2>
+            <form id="signinForm" onsubmit="return handleSignIn(event)">
+                <input type="text" id="name" placeholder="Full Name" required>
+                <input type="email" id="email" placeholder="Email Address" required>
+                <input type="tel" id="phone" placeholder="Phone Number" required>
+                <div style="text-align: left; margin: 15px 0;">
+                    <label>
+                        <input type="checkbox" required>
+                        I agree to the terms and conditions
+                    </label>
+                </div>
+                <button type="submit">Connect to WiFi</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function handleSignIn(event) {
+            event.preventDefault();
+            
+            // Here you can add code to validate and store user information
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value
+            };
+            
+            // You can send this data to your server if needed
+            console.log('Form data:', formData);
+            
+            // Notify the opener window that sign-in is complete
+            window.opener.postMessage('signin_complete', '*');
+            
+            // Close this window
+            window.close();
+            
+            return false;
+        }
+    </script>
+</body>
+</html>
