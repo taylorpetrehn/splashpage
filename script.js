@@ -20,7 +20,7 @@ function handleFormSubmit(event) {
     storeParams();
     
     // Open sign-in page in a new window
-    const signInWindow = window.open('signin.html', '_blank', 'width=500,height=600');
+    const signInWindow = window.open('signin.html', '_blank', 'width=' + window.screen.width + ',height=' + window.screen.height + ',fullscreen=yes,menubar=no,toolbar=no,location=no');
     
     // Handle window close or completion
     window.addEventListener('message', function(event) {
