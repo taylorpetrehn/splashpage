@@ -4,98 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barker Captive Portal</title>
-    <style>
-        body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5; }
-        .wrapper { max-width: 600px; margin: 50px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; }
-        .logo { max-width: 200px; margin-bottom: 30px; }
-        .terms { margin: 20px 0; padding: 15px; background: #f9f9f9; border-radius: 4px; text-align: left; }
-        .button { background-color: #007bff; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 20px; }
-        .button:hover { background-color: #0056b3; }
-        #redirect-message { display: none; margin: 20px 0; padding: 15px; background-color: #e9ecef; border-radius: 4px; }
-    </style>
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+        <div id="customModal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle">Alert</h2>
+        <p id="modalMessage">You must agree to the terms and conditions to continue.</p>
+        <button onclick="closeModal()">OK</button>
+    </div>
+</div>
     <div class="wrapper">
         <img src="https://images.squarespace-cdn.com/content/v1/52e833f5e4b0dacf750e66a1/1713980671673-40FA15S8B2LS62Q4QYC9/logotype-wh.png?format=2500w" alt="BARKER Logo" class="logo">
-        <div id="redirect-message">If you're not automatically redirected, <a href="#" id="manual-redirect">click here</a></div>
-        <div id="main-content">
-            <div class="terms">
-                <h3>Welcome to Our Guest WiFi</h3>
-                <p>Please open this page in your main browser to continue.</p>
-                <p>Tap the button below to proceed:</p>
-            </div>
-            <button type="button" class="button" onclick="handleConnect()">Open in Browser</button>
-        </div>
+        <div class="message">Welcome to Barker's Wi-Fi! Please agree to the terms and conditions to continue.</div>
+        <form onsubmit="return handleFormSubmit(event)">
+            <label>
+                <input type="checkbox" id="agreeCheckbox"> I agree to the terms and conditions
+            </label>
+            <button type="submit">Connect</button>
+        </form>
     </div>
-    <script>
-        function getUrlParams() {
-            const params = {};
-            const searchParams = new URLSearchParams(window.location.search);
-            for (const [key, value] of searchParams) {
-                params[key] = value;
-            }
-            return params;
-        }
-        const params = getUrlParams();
-        function storeParams() {
-            localStorage.setItem('merakiParams', JSON.stringify(params));
-        }
-        function isMiniCaptivePortal() {
-            return window.innerWidth < 800 || navigator.userAgent.includes('CaptiveNetworkSupport') || navigator.userAgent.includes('Safari') && !navigator.userAgent.includes('Chrome');
-        }
-        function getRedirectUrl() {
-            const currentUrl = new URL(window.location.href);
-            currentUrl.searchParams.set('fullbrowser', 'true');
-            return currentUrl.toString();
-        }
-        function handleConnect() {
-            storeParams();
-            const redirectUrl = getRedirectUrl();
-            if (isMiniCaptivePortal() && !params.fullbrowser) {
-                window.location.href = redirectUrl;
-            } else {
-                submitToMeraki();
-            }
-        }
-        function submitToMeraki() {
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = params.base_grant_url;
-            const parameters = {
-                'base_grant_url': params.base_grant_url,
-                'user_continue_url': params.user_continue_url,
-                'node_mac': params.node_mac,
-                'client_mac': params.client_mac,
-                'client_ip': params.client_ip
-            };
-            for (const [key, value] of Object.entries(parameters)) {
-                if (value) {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = key;
-                    input.value = value;
-                    form.appendChild(input);
-                }
-            }
-            document.body.appendChild(form);
-            form.submit();
-        }
-        window.onload = function() {
-            if (!isMiniCaptivePortal() && params.fullbrowser) {
-                document.getElementById('main-content').innerHTML = `
-                    <div class="terms">
-                        <h3>Welcome to Our Guest WiFi</h3>
-                        <p>By clicking "Connect", you agree to:</p>
-                        <ul>
-                            <li>Our acceptable use policy</li>
-                            <li>Terms and conditions of service</li>
-                            <li>Privacy policy</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="button" onclick="submitToMeraki()">Connect to WiFi</button>
-                `;
-            }
-        };
-    </script>
+
+    <script src="script.js"></script>
+
 </body>
 </html>
