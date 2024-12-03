@@ -5,12 +5,24 @@ function getUrlParams() {
     for (const [key, value] of searchParams) {
         params[key] = value;
     }
+    // Debug: Log the parameters we received
+    console.log('Received URL parameters:', params);
     return params;
 }
 
 // Store parameters in localStorage
 function storeParams() {
     const params = getUrlParams();
+    if (!params.base_grant_url) {
+        console.error('Warning: No base_grant_url found in parameters');
+        console.log('Expected parameters from Meraki:', {
+            base_grant_url: 'URL to submit credentials',
+            user_continue_url: 'URL to continue to after auth',
+            node_mac: 'Access point MAC',
+            client_mac: 'Client device MAC',
+            client_ip: 'Client IP address'
+        });
+    }
     localStorage.setItem('merakiParams', JSON.stringify(params));
 }
 
@@ -35,7 +47,14 @@ function handleFormSubmit(event) {
 // Submit credentials to Meraki
 function submitToMeraki() {
     const params = JSON.parse(localStorage.getItem('merakiParams'));
+    console.log('Submitting to Meraki with params:', params);
     
+    if (!params || !params.base_grant_url) {
+        console.error('Error: Missing required Meraki parameters');
+        alert('Error: Missing required network parameters. Please try reconnecting to the WiFi network.');
+        return;
+    }
+
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = params.base_grant_url;
@@ -58,6 +77,7 @@ function submitToMeraki() {
         }
     }
 
+    console.log('Submitting form to:', form.action);
     document.body.appendChild(form);
     form.submit();
 }
