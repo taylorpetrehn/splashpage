@@ -3,13 +3,24 @@ function getUrlParams() {
     const searchParams = new URLSearchParams(window.location.search);
     console.log('Raw URL:', window.location.href);
     
-    return {
+    const params = {
         base_grant_url: searchParams.get('base_grant_url'),
         user_continue_url: searchParams.get('user_continue_url'),
         node_mac: searchParams.get('node_mac'),
         client_mac: searchParams.get('client_mac'),
         client_ip: searchParams.get('client_ip')
     };
+    
+    // Debug logging
+    console.log('Meraki Parameters:', {
+        base_grant_url: params.base_grant_url || 'NOT PROVIDED',
+        user_continue_url: params.user_continue_url || 'NOT PROVIDED',
+        node_mac: params.node_mac || 'NOT PROVIDED',
+        client_mac: params.client_mac || 'NOT PROVIDED',
+        client_ip: params.client_ip || 'NOT PROVIDED'
+    });
+    
+    return params;
 }
 
 // Store parameters in localStorage
@@ -42,6 +53,14 @@ function handleFormSubmit(event) {
     const left = (window.screen.width - width) / 2;
     const top = (window.screen.height - height) / 2;
     
+    // Debug logging
+    console.log('Opening window with dimensions:', {
+        width,
+        height,
+        left,
+        top
+    });
+    
     // Open sign-in page in a new window with specific dimensions and features
     const windowFeatures = `
         width=${width},
@@ -61,6 +80,7 @@ function handleFormSubmit(event) {
     
     if (signInWindow) {
         signInWindow.focus();
+        console.log('Successfully opened sign-in window');
     } else {
         console.error('Failed to open popup window - it may have been blocked by the browser');
         alert('Please allow popups for this site to continue with WiFi authentication');
@@ -68,8 +88,9 @@ function handleFormSubmit(event) {
     
     // Handle window close or completion
     window.addEventListener('message', function(event) {
-        if (event.data === 'signin_complete') {
-            submitToMeraki(event.data);
+        console.log('Received message from sign-in window:', event.data);
+        if (event.data.type === 'signin_complete') {
+            submitToMeraki(event.data.data);
         }
     });
 
@@ -79,7 +100,8 @@ function handleFormSubmit(event) {
 // Submit credentials to Meraki
 function submitToMeraki(formData) {
     const params = JSON.parse(localStorage.getItem('merakiParams'));
-    console.log('Submitting to Meraki with params:', params);
+    console.log('Retrieved Meraki params from storage:', params);
+    console.log('Form data to submit:', formData);
     
     if (!params || !params.base_grant_url) {
         console.error('Error: Missing base_grant_url parameter');
@@ -112,6 +134,8 @@ function submitToMeraki(formData) {
     });
     
     console.log('Submitting form to:', form.action);
+    console.log('Final form data:', Object.fromEntries(new FormData(form)));
+    
     document.body.appendChild(form);
     form.submit();
 }
