@@ -59,20 +59,28 @@ function handleFormSubmit(event) {
     // Add new message listener
     window.addEventListener('message', handleSignInMessage);
     
-    // Calculate window dimensions for full screen
-    const width = Math.min(600, window.screen.width);
-    const height = Math.min(800, window.screen.height);
+    // Calculate window dimensions based on screen size
+    const minWidth = 600;
+    const minHeight = 800;
+    const screenWidth = window.screen.width;
+    const screenHeight = window.screen.height;
+    
+    // For desktop, use 80% of screen width/height with minimum sizes
+    const width = Math.max(minWidth, Math.min(screenWidth * 0.8, 1200));
+    const height = Math.max(minHeight, Math.min(screenHeight * 0.8, 1000));
     
     // Calculate position for center of screen
-    const left = (window.screen.width - width) / 2;
-    const top = (window.screen.height - height) / 2;
+    const left = (screenWidth - width) / 2;
+    const top = (screenHeight - height) / 2;
     
     // Debug logging
     console.log('Opening window with dimensions:', {
         width,
         height,
         left,
-        top
+        top,
+        screenWidth,
+        screenHeight
     });
     
     // Open sign-in page in a new window with specific dimensions and features
