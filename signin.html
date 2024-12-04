@@ -18,6 +18,7 @@
         }
         
         .wrapper {
+            position: relative;
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
@@ -33,7 +34,7 @@
             max-width: 300px;
             width: 90%;
             height: auto;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
         }
         
         .signin-form {
@@ -55,6 +56,7 @@
         
         .form-group {
             margin-bottom: 1.5rem;
+            position: relative;
         }
         
         .signin-form input[type="text"],
@@ -68,6 +70,8 @@
             box-sizing: border-box;
             font-size: 16px;
             transition: border-color 0.3s ease;
+            -webkit-appearance: none;
+            appearance: none;
         }
         
         .signin-form input:focus {
@@ -86,6 +90,8 @@
             font-size: 16px;
             font-weight: 600;
             transition: background-color 0.3s ease;
+            -webkit-appearance: none;
+            appearance: none;
         }
         
         .signin-form button:hover {
@@ -110,8 +116,14 @@
         }
         
         @media (max-width: 480px) {
+            body {
+                align-items: flex-start;
+                padding-top: 20px;
+            }
+            
             .wrapper {
                 padding: 15px;
+                min-height: 100vh;
             }
             
             .signin-form {
@@ -120,6 +132,19 @@
             
             .logo {
                 max-width: 200px;
+            }
+            
+            /* Add a container for mobile keyboard adjustment */
+            .mobile-keyboard-space {
+                display: none;
+                height: 0;
+                transition: height 0.3s ease;
+            }
+            
+            /* When keyboard is active */
+            .keyboard-active .mobile-keyboard-space {
+                display: block;
+                height: 150px;
             }
         }
     </style>
@@ -152,6 +177,8 @@
                 <button type="submit">Connect to WiFi</button>
             </form>
         </div>
+        <!-- Add space for mobile keyboard -->
+        <div class="mobile-keyboard-space"></div>
     </div>
 
     <script>
@@ -203,18 +230,19 @@
         }
 
         // Improve mobile input experience
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('focus', function() {
-                // Add padding when keyboard appears on mobile
-                if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                    document.body.style.paddingBottom = '150px';
-                }
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('focus', function() {
+                    document.body.classList.add('keyboard-active');
+                });
+                
+                input.addEventListener('blur', function() {
+                    document.body.classList.remove('keyboard-active');
+                });
             });
-            
-            input.addEventListener('blur', function() {
-                document.body.style.paddingBottom = '0';
-            });
-        });
+        }
     </script>
 </body>
 </html>
