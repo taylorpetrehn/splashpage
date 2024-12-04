@@ -40,14 +40,28 @@ function storeParams() {
     localStorage.setItem('merakiParams', JSON.stringify(params));
 }
 
+// Message handler for sign-in window
+function handleSignInMessage(event) {
+    console.log('Received message from sign-in window:', event.data);
+    if (event.data.type === 'signin_complete' && event.data.data) {
+        submitToMeraki(event.data.data);
+    }
+}
+
 // Handle form submission
 function handleFormSubmit(event) {
     event.preventDefault();
     storeParams();
     
+    // Remove any existing message listeners
+    window.removeEventListener('message', handleSignInMessage);
+    
+    // Add new message listener
+    window.addEventListener('message', handleSignInMessage);
+    
     // Calculate window dimensions for full screen
-    const width = window.screen.width;
-    const height = window.screen.height;
+    const width = Math.min(600, window.screen.width);
+    const height = Math.min(800, window.screen.height);
     
     // Calculate position for center of screen
     const left = (window.screen.width - width) / 2;
@@ -67,7 +81,6 @@ function handleFormSubmit(event) {
         height=${height},
         left=${left},
         top=${top},
-        fullscreen=yes,
         menubar=no,
         toolbar=no,
         location=no,
@@ -85,14 +98,6 @@ function handleFormSubmit(event) {
         console.error('Failed to open popup window - it may have been blocked by the browser');
         alert('Please allow popups for this site to continue with WiFi authentication');
     }
-    
-    // Handle window close or completion
-    window.addEventListener('message', function(event) {
-        console.log('Received message from sign-in window:', event.data);
-        if (event.data.type === 'signin_complete') {
-            submitToMeraki(event.data.data);
-        }
-    });
 
     return false;
 }

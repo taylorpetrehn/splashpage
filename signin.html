@@ -178,14 +178,26 @@
                 return false;
             }
             
-            // Send message to parent window
-            window.opener.postMessage({
-                type: 'signin_complete',
-                data: formData
-            }, '*');
-            
-            // Close this window
-            window.close();
+            try {
+                // Send message to parent window
+                if (window.opener) {
+                    window.opener.postMessage({
+                        type: 'signin_complete',
+                        data: formData
+                    }, '*');
+                    
+                    // Small delay before closing to ensure message is sent
+                    setTimeout(() => {
+                        window.close();
+                    }, 100);
+                } else {
+                    console.error('No parent window found');
+                    alert('Error: Unable to communicate with the main window. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                alert('An error occurred. Please try again.');
+            }
             
             return false;
         }
