@@ -25,7 +25,6 @@
     <div id="debug"></div>
 
     <script>
-        // Debug function
         function debugLog(message) {
             console.log(message);
             const debugDiv = document.getElementById('debug');
@@ -34,120 +33,69 @@
             }
         }
 
-        // Get URL parameters
-        function getUrlParams() {
-            const searchParams = new URLSearchParams(window.location.search);
-            const params = {
-                base_grant_url: searchParams.get('base_grant_url'),
-                user_continue_url: searchParams.get('user_continue_url'),
-                node_mac: searchParams.get('node_mac'),
-                client_mac: searchParams.get('client_mac'),
-                client_ip: searchParams.get('client_ip')
-            };
-            
-            debugLog('URL Parameters:');
-            Object.entries(params).forEach(([key, value]) => {
-                debugLog(`${key}: ${value || 'NOT PROVIDED'}`);
-            });
-            
-            return params;
-        }
-
-        // Store parameters and redirect
-        function init() {
-            debugLog('Page loaded');
-            
-            // Store parameters
-            const params = getUrlParams();
-            localStorage.setItem('merakiParams', JSON.stringify(params));
-            
-            // Check environment
-            if (window.navigator.standalone !== undefined) {
-                debugLog('Running in WebKit WebView');
-            } else {
-                debugLog('Running in regular browser');
-            }
-            
-            // Construct signin URL with parameters
+        function forceBrowserRedirect() {
             const currentUrl = window.location.href;
-            const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
-            const signinUrl = baseUrl + 'signin.html?' + new URLSearchParams(params).toString();
+            debugLog('Current URL: ' + currentUrl);
+
+            // Try to get the Meraki parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const baseGrantUrl = urlParams.get('base_grant_url');
+            const userContinueUrl = urlParams.get('user_continue_url');
             
-            debugLog('Attempting to redirect to: ' + signinUrl);
+            debugLog('Base Grant URL: ' + baseGrantUrl);
+            debugLog('User Continue URL: ' + userContinueUrl);
+
+            // Create a special URL that's more likely to open in a browser
+            let redirectUrl = currentUrl;
             
-            // Try multiple methods to open in full browser
+            // If we have the Meraki parameters, construct a more specific URL
+            if (baseGrantUrl && userContinueUrl) {
+                const encodedGrantUrl = encodeURIComponent(baseGrantUrl);
+                const encodedContinueUrl = encodeURIComponent(userContinueUrl);
+                redirectUrl = `https://${window.location.hostname}/splash?grant_url=${encodedGrantUrl}&continue_url=${encodedContinueUrl}`;
+            }
+
+            debugLog('Attempting to redirect to: ' + redirectUrl);
+
+            // Try multiple methods to force browser open
             try {
-                // Method 1: Try window.open
-                const newWindow = window.open(signinUrl, '_blank');
-                if (newWindow) {
-                    debugLog('Window.open succeeded');
-                    return;
-                }
-                
-                // Method 2: Try location.replace
-                debugLog('Window.open failed, trying location.replace');
-                window.location.replace(signinUrl);
-            } catch (error) {
-                debugLog('Error during redirect: ' + error);
-                
-                // Method 3: Fallback to basic redirect
-                window.location.href = signinUrl;
+                // Method 1: Try using a timeout to ensure the debug message is visible
+                setTimeout(() => {
+                    // Method 2: Try using window.open with specific parameters
+                    const newWindow = window.open(redirectUrl, '_system', 'location=yes,hidden=no,closebuttoncaption=Close');
+                    if (!newWindow) {
+                        // Method 3: Try location.replace with the https protocol
+                        window.location.replace(redirectUrl);
+                    }
+                }, 1000);
+            } catch (e) {
+                debugLog('Redirect error: ' + e.message);
+                // Fallback: simple location change
+                window.location.href = redirectUrl;
             }
-        }
-
-        function isWebView() {
-            var standalone = window.navigator.standalone,
-                userAgent = window.navigator.userAgent.toLowerCase(),
-                safari = /safari/.test(userAgent),
-                ios = /iphone|ipod|ipad/.test(userAgent);
-
-            debugLog(`Standalone: ${standalone}`);
-            debugLog(`UserAgent: ${userAgent}`);
-            debugLog(`Safari: ${safari}`);
-            debugLog(`iOS: ${ios}`);
-            
-            if (ios) {
-                return !safari;
-            } else {
-                return userAgent.includes('wv') || !safari;
-            }
-        }
-
-        function forceFullBrowser() {
-            if (isWebView()) {
-                debugLog('Detected WebView, attempting to force full browser...');
-                
-                // Method 1: Try using window.open
-                const newWindow = window.open(window.location.href, '_system');
-                if (newWindow) {
-                    debugLog('Opened in _system');
-                    window.close();
-                    return;
-                }
-
-                // Method 2: Try using location.replace with custom scheme
-                const currentUrl = new URL(window.location.href);
-                const httpsUrl = currentUrl.href.replace('http:', 'https:');
-                debugLog(`Attempting to redirect to: ${httpsUrl}`);
-                window.location.replace(httpsUrl);
-            } else {
-                debugLog('Already in full browser');
-            }
-        }
-
-        // Run initialization
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
         }
 
         // Run on page load
         window.onload = function() {
+            debugLog('Environment Info:');
+            debugLog(`User Agent: ${navigator.userAgent}`);
             debugLog(`Viewport size: ${window.innerWidth}x${window.innerHeight}`);
             debugLog(`Screen size: ${window.screen.width}x${window.screen.height}`);
             debugLog(`Window size: ${window.outerWidth}x${window.outerHeight}`);
-            forceFullBrowser();
+            debugLog(`Protocol: ${window.location.protocol}`);
+            debugLog(`Hostname: ${window.location.hostname}`);
+            
+            // Add a button to trigger the redirect manually
+            const redirectButton = document.createElement('button');
+            redirectButton.innerHTML = 'Open in Browser';
+            redirectButton.style.padding = '10px 20px';
+            redirectButton.style.fontSize = '16px';
+            redirectButton.style.margin = '20px';
+            redirectButton.onclick = forceBrowserRedirect;
+            document.body.insertBefore(redirectButton, document.body.firstChild);
+
+            // Try automatic redirect after a short delay
+            setTimeout(forceBrowserRedirect, 2000);
         };
     </script>
 </body>
