@@ -2,19 +2,104 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Barker Captive Portal</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Our WiFi</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0047AB, #00264d);
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .logo {
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        
+        button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        /* Mobile Styles */
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+                width: 95%;
+            }
+            
+            .logo {
+                max-width: 200px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            button {
+                width: 100%;
+                padding: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="wrapper">
+    <div class="container">
         <img src="https://images.squarespace-cdn.com/content/v1/52e833f5e4b0dacf750e66a1/1713980671673-40FA15S8B2LS62Q4QYC9/logotype-wh.png?format=2500w" alt="BARKER Logo" class="logo">
-        <div class="message">Welcome to Barker's Wi-Fi! To access our Wi-Fi, please tap the button below:</div>
-        <form onsubmit="return handleFormSubmit(event)">
-            <button type="submit">Connect</button>
-        </form>
+        <h1>Welcome to Our Guest WiFi</h1>
+        <p>Please sign in to access our secure WiFi network. By connecting, you agree to our terms of service and acceptable use policy.</p>
+        <button onclick="handleConnect()">Connect to WiFi</button>
     </div>
-
+    
     <script src="script.js"></script>
+    <script>
+        // Store Meraki parameters when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            storeParams();
+        });
+    </script>
 </body>
 </html>

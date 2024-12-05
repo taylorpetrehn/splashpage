@@ -2,243 +2,228 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sign In - Barker WiFi</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiFi Sign In</title>
     <style>
         body {
             margin: 0;
             padding: 0;
+            font-family: Arial, sans-serif;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #0047AB;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
         }
         
-        .wrapper {
+        .container {
+            display: flex;
             width: 100%;
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px;
-            box-sizing: border-box;
-            display: flex;
-            align-items: center;
-            gap: 4rem;
+            margin: auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
         }
         
-        .logo {
-            max-width: 400px;
-            width: 90%;
+        .logo-section {
+            flex: 1;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .logo-section img {
+            max-width: 100%;
             height: auto;
         }
         
-        .signin-form {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        .form-section {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .form-container {
+            max-width: 400px;
+            margin: auto;
+            width: 100%;
+        }
+        
+        h1 {
             color: #333;
-            width: 100%;
-            max-width: 500px;
-        }
-        
-        .signin-form h2 {
-            font-size: 28px;
-            margin: 0 0 30px 0;
-            color: #333;
-        }
-        
-        .signin-form input {
-            width: 100%;
-            padding: 12px 16px;
-            margin: 8px 0;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-size: 16px;
-            transition: border-color 0.2s;
-        }
-        
-        .signin-form input:focus {
-            border-color: #0047AB;
-            outline: none;
-        }
-        
-        .signin-form button {
-            width: 100%;
-            padding: 14px;
-            background-color: #0047AB;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.2s;
-        }
-        
-        .signin-form button:hover {
-            background-color: #003380;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
         }
         
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 1rem;
         }
         
-        .checkbox-container {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin: 24px 0;
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
         }
         
-        .checkbox-container input[type="checkbox"] {
-            width: auto;
-            margin-top: 4px;
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
         }
         
-        .checkbox-container label {
-            font-size: 14px;
-            line-height: 1.4;
-            color: #666;
+        input[type="text"]:focus,
+        input[type="email"]:focus {
+            border-color: #007bff;
+            outline: none;
         }
-
-        /* Desktop Specific Styles */
-        @media (min-width: 1024px) {
-            .wrapper {
-                flex-direction: row;
-                justify-content: space-between;
-                padding: 60px;
-            }
-            
-            .logo-container {
-                flex: 1;
-                display: flex;
-                justify-content: center;
-            }
-            
-            .logo {
-                max-width: 400px;
-                margin: 0;
-            }
-            
-            .signin-form {
-                flex: 1;
-                margin: 0;
-            }
+        
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
-
-        /* Tablet Styles */
-        @media (min-width: 768px) and (max-width: 1023px) {
-            .wrapper {
-                padding: 40px;
-            }
-            
-            .signin-form {
-                max-width: 450px;
-            }
+        
+        button:hover {
+            background: #0056b3;
         }
-
+        
+        .error-message {
+            color: #dc3545;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
         /* Mobile Styles */
-        @media (max-width: 767px) {
-            .wrapper {
+        @media (max-width: 768px) {
+            .container {
                 flex-direction: column;
-                padding: 20px;
+                margin: 1rem;
+                max-height: calc(100vh - 2rem);
             }
             
-            .logo {
-                max-width: 200px;
-                margin-bottom: 2rem;
+            .logo-section {
+                padding: 1rem;
             }
             
-            .signin-form {
-                padding: 25px;
+            .form-section {
+                padding: 1rem;
             }
             
-            .signin-form h2 {
-                font-size: 24px;
-                margin-bottom: 20px;
+            .form-container {
+                max-width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="wrapper">
-        <div class="logo-container">
-            <img src="https://images.squarespace-cdn.com/content/v1/52e833f5e4b0dacf750e66a1/1713980671673-40FA15S8B2LS62Q4QYC9/logotype-wh.png?format=2500w" alt="BARKER Logo" class="logo">
+    <div class="container">
+        <div class="logo-section">
+            <img src="https://images.squarespace-cdn.com/content/v1/52e833f5e4b0dacf750e66a1/1713980671673-40FA15S8B2LS62Q4QYC9/logotype-wh.png?format=2500w" alt="BARKER Logo">
         </div>
-        
-        <div class="signin-form">
-            <h2>Sign In to Access WiFi</h2>
-            <form id="signinForm" onsubmit="return handleSignIn(event)">
-                <div class="form-group">
-                    <input type="text" id="name" placeholder="Full Name" required
-                           autocomplete="name" autocorrect="off">
-                </div>
-                <div class="form-group">
-                    <input type="email" id="email" placeholder="Email Address" required
-                           autocomplete="email" autocapitalize="off">
-                </div>
-                <div class="form-group">
-                    <input type="tel" id="phone" placeholder="Phone Number" required
-                           autocomplete="tel" pattern="[0-9]*">
-                </div>
-                <div class="checkbox-container">
-                    <input type="checkbox" id="terms" required>
-                    <label for="terms">
-                        I agree to the terms and conditions of using this WiFi service
-                    </label>
-                </div>
-                <button type="submit">Connect to WiFi</button>
-            </form>
+        <div class="form-section">
+            <div class="form-container">
+                <h1>Welcome to Our WiFi</h1>
+                <form id="signInForm" onsubmit="return handleFormSubmit(event)">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required>
+                        <div class="error-message" id="nameError">Please enter your full name</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                        <div class="error-message" id="emailError">Please enter a valid email address</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                        <div class="error-message" id="phoneError">Please enter your phone number</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="terms">Terms and Conditions</label>
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <div class="error-message" id="termsError">Please agree to the terms and conditions</div>
+                    </div>
+                    <button type="submit">Connect to WiFi</button>
+                </form>
+            </div>
         </div>
     </div>
-
+    
     <script>
-        // Prevent zooming on iOS
-        document.addEventListener('touchmove', function (event) {
-            if (event.scale !== 1) {
-                event.preventDefault();
-            }
-        }, { passive: false });
-        
-        function handleSignIn(event) {
+        function handleFormSubmit(event) {
             event.preventDefault();
             
-            const formData = {
-                name: document.getElementById('name').value.trim(),
-                email: document.getElementById('email').value.trim(),
-                phone: document.getElementById('phone').value.trim(),
-                terms_accepted: document.getElementById('terms').checked
-            };
+            // Reset error messages
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
             
-            // Validate form data
-            if (!formData.name || !formData.email || !formData.phone || !formData.terms_accepted) {
-                alert('Please fill in all required fields');
+            // Get form data
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const terms = document.getElementById('terms').checked;
+            
+            // Validate inputs
+            let isValid = true;
+            
+            if (!name) {
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!email || !email.includes('@')) {
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!phone) {
+                document.getElementById('phoneError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!terms) {
+                document.getElementById('termsError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!isValid) {
                 return false;
             }
             
-            try {
-                // Send message to parent window
-                if (window.opener) {
-                    window.opener.postMessage({
-                        type: 'signin_complete',
-                        data: formData
-                    }, '*');
-                    
-                    // Small delay before closing to ensure message is sent
-                    setTimeout(() => {
-                        window.close();
-                    }, 100);
-                } else {
-                    console.error('No parent window found');
-                    alert('Error: Unable to communicate with the main window. Please try again.');
-                }
-            } catch (error) {
-                console.error('Error sending message:', error);
-                alert('An error occurred. Please try again.');
+            // Send form data to parent window
+            const formData = {
+                name: name,
+                email: email,
+                phone: phone,
+                terms_accepted: terms
+            };
+            
+            console.log('Form data:', formData);
+            
+            if (window.opener) {
+                // If opened in a popup, send message to parent
+                window.opener.postMessage({
+                    type: 'signin_complete',
+                    data: formData
+                }, '*');
+            } else {
+                // If opened directly, submit form data
+                submitToMeraki(formData);
             }
             
             return false;
