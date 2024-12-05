@@ -1,6 +1,13 @@
 import 'dotenv/config';
 import fetch from 'node-fetch';
 
+// Debug dotenv loading
+console.log('Current working directory:', process.cwd());
+console.log('Environment variables loaded:', {
+    MERAKI_API_KEY: process.env.MERAKI_API_KEY ? '***exists***' : 'not found',
+    NODE_ENV: process.env.NODE_ENV
+});
+
 // Check if API key is provided
 const apiKey = process.env.MERAKI_API_KEY || process.argv[2];
 if (!apiKey) {
