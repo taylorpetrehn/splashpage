@@ -8,6 +8,10 @@ if (!apiKey) {
     process.exit(1);
 }
 
+// Mask the API key for logging (show only last 4 characters)
+const maskedKey = '*'.repeat(Math.max(0, apiKey.length - 4)) + apiKey.slice(-4);
+console.log(`Using API key: ${maskedKey}`);
+
 const MERAKI_API_BASE = 'https://api.meraki.com/api/v1';
 const headers = {
     'X-Cisco-Meraki-API-Key': apiKey,
@@ -16,11 +20,20 @@ const headers = {
 
 async function getNetworks() {
     try {
+        console.log('Making request to:', `${MERAKI_API_BASE}/organizations`);
+        console.log('Headers:', {
+            ...headers,
+            'X-Cisco-Meraki-API-Key': maskedKey
+        });
+
         // First, get organizations
         const orgsResponse = await fetch(`${MERAKI_API_BASE}/organizations`, { headers });
+        
         if (!orgsResponse.ok) {
-            throw new Error(`Failed to fetch organizations: ${orgsResponse.statusText}`);
+            const responseText = await orgsResponse.text();
+            throw new Error(`Failed to fetch organizations: ${orgsResponse.status} ${orgsResponse.statusText}\nResponse: ${responseText}`);
         }
+        
         const organizations = await orgsResponse.json();
 
         console.log('\nFound Organizations:');
@@ -60,7 +73,15 @@ async function getNetworks() {
     } catch (error) {
         console.error('Error:', error.message);
         if (error.message.includes('401')) {
-            console.error('\nAuthentication failed. Please check your API key.');
+            console.error('\nAuthentication failed. This could be because:');
+            console.error('1. The API key is incorrect');
+            console.error('2. The API key has not been enabled in the Meraki dashboard');
+            console.error('3. The API key does not have the correct permissions');
+            console.error('\nPlease verify:');
+            console.error('1. You have enabled API access in your Meraki dashboard');
+            console.error('2. You have generated an API key');
+            console.error('3. You are using the correct, full API key');
+            console.error('4. The API key has been activated (this can take a few minutes after generation)');
         }
         process.exit(1);
     }
