@@ -3,41 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0;url=signin.html">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>WiFi Login</title>
     <style>
         body {
             margin: 0;
             padding: 20px;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        }
-        
-        .container {
             text-align: center;
-            max-width: 600px;
-            margin: 0 auto;
         }
         
-        .logo {
-            max-width: 200px;
-            height: auto;
-            margin-bottom: 20px;
-        }
-        
-        button {
-            padding: 10px 20px;
-            cursor: pointer;
+        #debug {
+            margin-top: 20px;
+            text-align: left;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="https://images.squarespace-cdn.com/content/v1/52e833f5e4b0dacf750e66a1/1713980671673-40FA15S8B2LS62Q4QYC9/logotype-wh.png?format=2500w" alt="Logo" class="logo">
-        <div id="debug"></div>
-        <button onclick="handleConnect()">Connect to WiFi</button>
-    </div>
+    <div id="debug"></div>
 
     <script>
-        // Debug function to display information
+        // Debug function
         function debugLog(message) {
             console.log(message);
             const debugDiv = document.getElementById('debug');
@@ -63,54 +51,54 @@
             return params;
         }
 
-        // Store parameters in localStorage
-        function storeParams() {
+        // Store parameters and redirect
+        function init() {
+            debugLog('Page loaded');
+            
+            // Store parameters
             const params = getUrlParams();
             localStorage.setItem('merakiParams', JSON.stringify(params));
-        }
-
-        // Handle connect button click
-        function handleConnect() {
-            debugLog('Connect button clicked');
             
-            const params = getUrlParams();
-            if (!params.base_grant_url || !params.user_continue_url) {
-                debugLog('Error: Missing required Meraki parameters');
-                return;
-            }
-
-            // Try different methods to open in full browser
-            const currentUrl = window.location.href;
-            const signinUrl = currentUrl.replace('index.html', 'signin.html');
-            
-            debugLog('Attempting to open signin page...');
-
-            // Method 1: Try window.open
-            const newWindow = window.open(signinUrl, '_blank');
-            if (newWindow) {
-                debugLog('Window.open succeeded');
-                return;
-            }
-
-            // Method 2: Try location.href with a timeout
-            debugLog('Window.open failed, trying location.href');
-            setTimeout(() => {
-                window.location.href = signinUrl;
-            }, 100);
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            debugLog('Page loaded');
-            storeParams();
-            
-            // Check if we're in a captive portal context
+            // Check environment
             if (window.navigator.standalone !== undefined) {
                 debugLog('Running in WebKit WebView');
             } else {
                 debugLog('Running in regular browser');
             }
-        });
+            
+            // Construct signin URL with parameters
+            const currentUrl = window.location.href;
+            const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
+            const signinUrl = baseUrl + 'signin.html?' + new URLSearchParams(params).toString();
+            
+            debugLog('Attempting to redirect to: ' + signinUrl);
+            
+            // Try multiple methods to open in full browser
+            try {
+                // Method 1: Try window.open
+                const newWindow = window.open(signinUrl, '_blank');
+                if (newWindow) {
+                    debugLog('Window.open succeeded');
+                    return;
+                }
+                
+                // Method 2: Try location.replace
+                debugLog('Window.open failed, trying location.replace');
+                window.location.replace(signinUrl);
+            } catch (error) {
+                debugLog('Error during redirect: ' + error);
+                
+                // Method 3: Fallback to basic redirect
+                window.location.href = signinUrl;
+            }
+        }
+
+        // Run initialization
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
     </script>
 </body>
 </html>
