@@ -1,7 +1,12 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fetch from 'node-fetch';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,6 +22,27 @@ const MERAKI_HEADERS = {
     'X-Cisco-Meraki-API-Key': process.env.MERAKI_API_KEY,
     'Content-Type': 'application/json'
 };
+
+// Test endpoint to verify API connectivity
+app.get('/api/test-connection', async (req, res) => {
+    try {
+        const networkId = process.env.MERAKI_NETWORK_ID;
+        const response = await fetch(
+            `${MERAKI_API_BASE}/networks/${networkId}/clients`,
+            { headers: MERAKI_HEADERS }
+        );
+        
+        if (!response.ok) {
+            throw new Error(`API request failed: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        res.json({ status: 'success', clientCount: data.length });
+    } catch (error) {
+        console.error('API Test Error:', error);
+        res.status(500).json({ status: 'error', message: error.message });
+    }
+});
 
 // Network statistics endpoint
 app.get('/api/network-stats', async (req, res) => {
@@ -53,19 +79,12 @@ app.get('/api/network-stats', async (req, res) => {
         const usageData = await usageResponse.json();
 
         res.json({
-            status: 'success',
-            data: {
-                client: clientData,
-                usage: usageData
-            }
+            client: clientData,
+            usage: usageData
         });
     } catch (error) {
-        console.error('Error fetching network stats:', error);
-        res.status(500).json({ 
-            status: 'error',
-            message: 'Failed to fetch network statistics',
-            error: error.message
-        });
+        console.error('Network Stats Error:', error);
+        res.status(500).json({ error: error.message });
     }
 });
 
