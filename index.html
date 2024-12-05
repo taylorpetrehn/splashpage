@@ -29,7 +29,9 @@
         function debugLog(message) {
             console.log(message);
             const debugDiv = document.getElementById('debug');
-            debugDiv.innerHTML += `<div>${message}</div>`;
+            if (debugDiv) {
+                debugDiv.innerHTML += message + '<br>';
+            }
         }
 
         // Get URL parameters
@@ -93,12 +95,60 @@
             }
         }
 
+        function isWebView() {
+            var standalone = window.navigator.standalone,
+                userAgent = window.navigator.userAgent.toLowerCase(),
+                safari = /safari/.test(userAgent),
+                ios = /iphone|ipod|ipad/.test(userAgent);
+
+            debugLog(`Standalone: ${standalone}`);
+            debugLog(`UserAgent: ${userAgent}`);
+            debugLog(`Safari: ${safari}`);
+            debugLog(`iOS: ${ios}`);
+            
+            if (ios) {
+                return !safari;
+            } else {
+                return userAgent.includes('wv') || !safari;
+            }
+        }
+
+        function forceFullBrowser() {
+            if (isWebView()) {
+                debugLog('Detected WebView, attempting to force full browser...');
+                
+                // Method 1: Try using window.open
+                const newWindow = window.open(window.location.href, '_system');
+                if (newWindow) {
+                    debugLog('Opened in _system');
+                    window.close();
+                    return;
+                }
+
+                // Method 2: Try using location.replace with custom scheme
+                const currentUrl = new URL(window.location.href);
+                const httpsUrl = currentUrl.href.replace('http:', 'https:');
+                debugLog(`Attempting to redirect to: ${httpsUrl}`);
+                window.location.replace(httpsUrl);
+            } else {
+                debugLog('Already in full browser');
+            }
+        }
+
         // Run initialization
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);
         } else {
             init();
         }
+
+        // Run on page load
+        window.onload = function() {
+            debugLog(`Viewport size: ${window.innerWidth}x${window.innerHeight}`);
+            debugLog(`Screen size: ${window.screen.width}x${window.screen.height}`);
+            debugLog(`Window size: ${window.outerWidth}x${window.outerHeight}`);
+            forceFullBrowser();
+        };
     </script>
 </body>
 </html>
