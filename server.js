@@ -18,6 +18,8 @@ app.use(express.static(path.join(__dirname, '.')));
 
 // Meraki API configuration
 const MERAKI_API_BASE = 'https://api.meraki.com/api/v1';
+console.log('API Key:', process.env.MERAKI_API_KEY ? '***exists***' : 'not found');
+console.log('Network ID:', process.env.MERAKI_NETWORK_ID);
 const MERAKI_HEADERS = {
     'X-Cisco-Meraki-API-Key': process.env.MERAKI_API_KEY,
     'Content-Type': 'application/json'
@@ -27,13 +29,19 @@ const MERAKI_HEADERS = {
 app.get('/api/test-connection', async (req, res) => {
     try {
         const networkId = process.env.MERAKI_NETWORK_ID;
+        console.log('Making request to Meraki API...');
+        console.log('Network ID:', networkId);
+        console.log('Headers:', { ...MERAKI_HEADERS, 'X-Cisco-Meraki-API-Key': '***hidden***' });
+        
         const response = await fetch(
             `${MERAKI_API_BASE}/networks/${networkId}/clients`,
             { headers: MERAKI_HEADERS }
         );
         
         if (!response.ok) {
-            throw new Error(`API request failed: ${response.statusText}`);
+            const errorText = await response.text();
+            console.error('API Error:', errorText);
+            throw new Error(`API request failed: ${response.statusText} - ${errorText}`);
         }
 
         const data = await response.json();
