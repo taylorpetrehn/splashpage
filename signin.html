@@ -2,259 +2,109 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>WiFi Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1900 Barker WiFi</title>
     <style>
-        /* Reset default margins and ensure full height */
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100vw;
-            height: 100vh;
-            min-height: -webkit-fill-available;
-            overflow: hidden;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Main container */
-        .container {
-            flex: 1;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            padding: 20px;
-            box-sizing: border-box;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Logo section */
-        .logo-section {
-            width: 100%;
-            text-align: center;
-            margin-bottom: 20px;
+            min-height: 100vh;
+            background-color: #f5f5f5;
         }
 
         .logo {
             max-width: 200px;
-            height: auto;
+            margin: 20px 0;
         }
 
-        /* Form section */
-        .form-section {
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 400px;
-            flex: 1;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"] {
-            width: 100%;
-            padding: 12px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px; /* Prevent iOS zoom */
-        }
-
-        .checkbox-container {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            margin: 15px 0;
-        }
-
-        .checkbox-container input[type="checkbox"] {
-            margin-top: 3px;
         }
 
         button {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-        }
-
-        /* Debug section */
-        #debug {
-            display: none; /* Hide in production */
             width: 100%;
-            padding: 10px;
+            font-size: 16px;
             margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #debug {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 4px;
+            font-family: monospace;
             font-size: 12px;
-            box-sizing: border-box;
-            overflow-y: auto;
-            max-height: 100px;
-        }
-
-        /* Error messages */
-        .error-message {
-            color: red;
-            font-size: 14px;
-            margin-top: 5px;
+            white-space: pre-wrap;
             display: none;
-        }
-
-        /* Force viewport height on iOS */
-        @supports (-webkit-touch-callout: none) {
-            .container {
-                height: -webkit-fill-available;
-            }
         }
     </style>
 </head>
 <body>
+    <img src="https://images.squarespace-cdn.com/content/v1/52e833f5e4b0dacf750e66a1/1713980671673-40FA15S8B2LS62Q4QYC9/logotype-wh.png?format=2500w" alt="1900 Barker" class="logo">
+    
     <div class="container">
-        <div class="logo-section">
-            <img src="https://images.squarespace-cdn.com/content/v1/52e833f5e4b0dacf750e66a1/1713980671673-40FA15S8B2LS62Q4QYC9/logotype-wh.png?format=2500w" alt="Logo" class="logo">
-        </div>
-        
-        <div class="form-section">
-            <form id="wifiForm" onsubmit="return handleFormSubmit(event)">
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" required
-                           autocomplete="name" autocorrect="off">
-                    <div class="error-message" id="nameError">Please enter your full name</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" required
-                           autocomplete="email" autocapitalize="off">
-                    <div class="error-message" id="emailError">Please enter a valid email address</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" required
-                           autocomplete="tel" pattern="[0-9]*">
-                    <div class="error-message" id="phoneError">Please enter your phone number</div>
-                </div>
-
-                <div class="checkbox-container">
-                    <input type="checkbox" id="terms" required>
-                    <label for="terms">I agree to the terms and conditions</label>
-                </div>
-                <div class="error-message" id="termsError">Please accept the terms and conditions</div>
-
-                <button type="submit">Connect to WiFi</button>
-            </form>
-        </div>
+        <h2>Welcome to 1900 Barker</h2>
+        <p>Click the button below to connect to our WiFi network.</p>
+        <button onclick="connectToWifi()">Connect to WiFi</button>
     </div>
 
     <div id="debug"></div>
 
     <script>
-        // Ensure proper viewport height on iOS
-        function fixIOSViewport() {
-            document.documentElement.style.setProperty(
-                '--vh', 
-                `${window.innerHeight * 0.01}px`
-            );
-        }
-
-        // Debug logging
         function debugLog(message) {
+            const debug = document.getElementById('debug');
+            debug.style.display = 'block';
+            debug.innerHTML += message + '\n';
             console.log(message);
-            const debugDiv = document.getElementById('debug');
-            debugDiv.style.display = 'block';
-            debugDiv.innerHTML += `<div>${message}</div>`;
         }
 
-        // Handle form submission
-        function handleFormSubmit(event) {
-            event.preventDefault();
-            debugLog('Form submitted');
-            
-            // Reset error messages
-            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
-            
-            // Get form data
-            const formData = {
-                name: document.getElementById('name').value.trim(),
-                email: document.getElementById('email').value.trim(),
-                phone: document.getElementById('phone').value.trim(),
-                terms_accepted: document.getElementById('terms').checked
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                base_grant_url: params.get('base_grant_url'),
+                user_continue_url: params.get('user_continue_url'),
+                node_mac: params.get('node_mac'),
+                client_mac: params.get('client_mac'),
+                client_ip: params.get('client_ip')
             };
+        }
+
+        function connectToWifi() {
+            debugLog('Connecting to WiFi...');
             
-            // Validate form
-            let isValid = true;
-            
-            if (!formData.name) {
-                document.getElementById('nameError').style.display = 'block';
-                isValid = false;
-            }
-            
-            if (!formData.email || !formData.email.includes('@')) {
-                document.getElementById('emailError').style.display = 'block';
-                isValid = false;
-            }
-            
-            if (!formData.phone) {
-                document.getElementById('phoneError').style.display = 'block';
-                isValid = false;
-            }
-            
-            if (!formData.terms_accepted) {
-                document.getElementById('termsError').style.display = 'block';
-                isValid = false;
-            }
-            
-            if (!isValid) {
-                debugLog('Form validation failed');
-                return false;
-            }
-            
-            // Get Meraki parameters from URL
-            const searchParams = new URLSearchParams(window.location.search);
-            const params = {
-                base_grant_url: searchParams.get('base_grant_url'),
-                user_continue_url: searchParams.get('user_continue_url') || '/dashboard-experience.html',
-                node_mac: searchParams.get('node_mac'),
-                client_mac: searchParams.get('client_mac'),
-                client_ip: searchParams.get('client_ip')
-            };
-            
-            debugLog('URL Parameters: ' + window.location.search);
-            debugLog('Parsed Parameters: ' + JSON.stringify(params, null, 2));
-            
+            const params = getUrlParams();
+            debugLog('URL Parameters: ' + JSON.stringify(params, null, 2));
+
             if (!params.base_grant_url) {
-                debugLog('Error: Missing base_grant_url parameter');
-                // If we're testing locally without Meraki parameters, just redirect to the dashboard
-                if (window.location.hostname === 'localhost') {
-                    debugLog('Local testing detected, redirecting to dashboard...');
-                    window.location.href = '/dashboard-experience.html';
-                    return false;
-                }
-                return false;
+                debugLog('Error: No base_grant_url found. Are you accessing through Meraki?');
+                return;
             }
-            
+
             // Create and submit form to Meraki
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = params.base_grant_url;
-            
-            // Add success URL first if available
+
+            // Add success_url if provided
             if (params.user_continue_url) {
                 const successUrl = document.createElement('input');
                 successUrl.type = 'hidden';
@@ -262,37 +112,18 @@
                 successUrl.value = params.user_continue_url;
                 form.appendChild(successUrl);
             }
-            
-            // Add form data
-            Object.entries(formData).forEach(([key, value]) => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = value;
-                form.appendChild(input);
-            });
-            
+
             debugLog('Submitting to Meraki...');
             document.body.appendChild(form);
             form.submit();
-            
-            return false;
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            debugLog('Sign-in page loaded');
-            fixIOSViewport();
-            
-            // Log viewport dimensions
-            debugLog(`Viewport size: ${window.innerWidth}x${window.innerHeight}`);
-            debugLog(`Screen size: ${window.screen.width}x${window.screen.height}`);
-        });
-
-        // Update viewport on resize
-        window.addEventListener('resize', function() {
-            fixIOSViewport();
-            debugLog(`New viewport size: ${window.innerWidth}x${window.innerHeight}`);
+        // Log initial parameters on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            debugLog('Page loaded');
+            debugLog('Current URL: ' + window.location.href);
+            const params = getUrlParams();
+            debugLog('Initial parameters: ' + JSON.stringify(params, null, 2));
         });
     </script>
 </body>
