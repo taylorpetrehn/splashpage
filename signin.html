@@ -229,16 +229,23 @@
             const searchParams = new URLSearchParams(window.location.search);
             const params = {
                 base_grant_url: searchParams.get('base_grant_url'),
-                user_continue_url: searchParams.get('user_continue_url'),
+                user_continue_url: searchParams.get('user_continue_url') || '/dashboard-experience.html',
                 node_mac: searchParams.get('node_mac'),
                 client_mac: searchParams.get('client_mac'),
                 client_ip: searchParams.get('client_ip')
             };
             
-            debugLog('Meraki parameters:', params);
+            debugLog('URL Parameters: ' + window.location.search);
+            debugLog('Parsed Parameters: ' + JSON.stringify(params, null, 2));
             
             if (!params.base_grant_url) {
                 debugLog('Error: Missing base_grant_url parameter');
+                // If we're testing locally without Meraki parameters, just redirect to the dashboard
+                if (window.location.hostname === 'localhost') {
+                    debugLog('Local testing detected, redirecting to dashboard...');
+                    window.location.href = '/dashboard-experience.html';
+                    return false;
+                }
                 return false;
             }
             
